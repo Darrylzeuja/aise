@@ -16,6 +16,7 @@ int main(int argc, char ** argv){
 
 	char buff[500];
 	char * ret;
+	int cnt = 0;
 
 	while(1)
 	{
@@ -36,9 +37,13 @@ int main(int argc, char ** argv){
 			}
 		}
 
+
+
 		/* USE your buff here */
-		fprintf(stdout, "%s", ret );
+		fprintf(stdout, "%d : %s", ++cnt, ret );
 	}
+
+
 
 
 	fclose(fd);
