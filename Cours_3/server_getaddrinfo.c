@@ -80,6 +80,9 @@ int main( int argc, char ** argv )
 		return 1;
 	}
 
+
+	write(client_socket, "SALUT!", strlen("SALUT!"));
+
 	fprintf(stderr,"Closing client socket\n");
 	close(client_socket);
 
