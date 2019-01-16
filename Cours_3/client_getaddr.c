@@ -69,7 +69,7 @@ int main( int argc, char ** argv )
 		return 1;	
 	}
 
-	/* Si nous sommes là le socket et connecté
+	/* Si nous sommes là le socket est connecté
 	 * avec succes on peut lire et ecrire dedans */
 
 	/* Use the socket */
