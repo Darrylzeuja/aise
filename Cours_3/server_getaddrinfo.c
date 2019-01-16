@@ -8,16 +8,31 @@
 
 int main( int argc, char ** argv )
 {
+	/* Valeur de retour de getaddrinfo
+	 * avec les alternatives pour configurer
+	 * le serveur en fonction des hints */
 	struct addrinfo *res = NULL;
+
+	/* Ces paramètres définissent comment
+	 * le serveur doit être configuré */
 	struct addrinfo hints;
-	memset(&hints, 0, sizeof(hints));
+	/* Toujours mettre la structure a 0 */
+	memset(&hints, 0, sizeof(hints)); 
+	/* Peu importe le protocole IPV4 (AF_INET)
+	 * ou IPV6 (AF_INET6) */
 	hints.ai_family = AF_UNSPEC;
+	/* Nous voulons un socket TCP */
 	hints.ai_socktype = SOCK_STREAM;
+	/* Ce paramètre permet d'écouter 
+	 * hors de la machine locale */
 	hints.ai_flags = AI_PASSIVE;
 
+	/* Ce programme attend un paramètre qui est le port */
 	if(argc != 2)
 		return 1;
 
+	/* Ici getaddrinfo permet de générer les 
+	 * configurations demandées */
 	int ret = getaddrinfo(NULL, argv[1],
 			&hints,
 			&res);
@@ -32,7 +47,13 @@ int main( int argc, char ** argv )
 	int listen_sock = -1;
 	int binded = 0;
 	
+	/* Nous allons parcourir les différentes
+	 * configurations pour trouver une qui marche
+	 * ces configurations sont définies par les hints */
+
 	for (tmp = res; tmp != NULL; tmp = tmp->ai_next) {
+
+		/* On crée un socket */
 		listen_sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
 
 		if( listen_sock < 0) {
@@ -40,6 +61,7 @@ int main( int argc, char ** argv )
 			continue;
 		}
 
+		/* On attache ce socket à un port donné (argument passé à getaddr) */
 		ret = bind( listen_sock, tmp->ai_addr, tmp->ai_addrlen);
 
 		if( ret < 0 ) {
@@ -57,7 +79,7 @@ int main( int argc, char ** argv )
 		return 1;	
 	}
 
-	/* Start listening */
+	/* On commence a ecouter */
 	ret = listen(listen_sock, 2);
 
 	if( ret < 0)
@@ -67,10 +89,16 @@ int main( int argc, char ** argv )
 	}
 
 
-	/* Now accept one connection */
+	/* On va maintenant accepter une connexion */
+	
+	/* Ceci sera remplis par
+	 * accept et décrit le client (ip port)*/
 	struct sockaddr client_info;
 	socklen_t addr_len;
+	
+	
 	fprintf(stderr,"Before accept\n");
+	/* On accepte un client et on récupére un nouveau FD */
 	int client_socket = accept(listen_sock, &client_info, &addr_len);
 	fprintf(stderr,"After accept\n");
 
@@ -80,13 +108,15 @@ int main( int argc, char ** argv )
 		return 1;
 	}
 
-
-	write(client_socket, "SALUT!", strlen("SALUT!"));
+	/* On envoie salut a celui qui s'est connecté */
+	write(client_socket, "SALUT!\n", strlen("SALUT!\n"));
 
 	fprintf(stderr,"Closing client socket\n");
+
+	/* On se déconnecte du client */
 	close(client_socket);
 
-
+	/* On ferme le serveur */
 	close(listen_sock);
 
 	return 0;
