@@ -18,6 +18,7 @@ int main(int argc, char ** argv )
 		dup2(pp[1], STDOUT_FILENO);
 		/* Close read end of the pipe */
 		close(pp[0]);
+		close(pp[1]);
 		/* Run command */
 		char * argv[] = {"printf","Salut Tout Le Monde ", NULL};
 		execvp( argv[0], argv);
@@ -32,8 +33,9 @@ int main(int argc, char ** argv )
 			dup2(pp[0], STDIN_FILENO);
 			/* Close write end of the pipe */
 			close(pp[1]);
+			close(pp[0]);
 			/* Run command */
-			char * argv[] = {"tac","-s", " ", NULL};
+			char * argv[] = {"wc","-c", " ", NULL};
 			execvp( argv[0], argv);
 		}
 		else
