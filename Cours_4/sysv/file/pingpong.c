@@ -90,7 +90,7 @@ int main( int argc, char ** argv )
 		fprintf(stderr, "Pingpong takes %g usec Bandwidth is %g MB/s",
 				total_time/NUM_MSG*1e6, (double)(SIZE*NUM_MSG*sizeof(int))/(total_time*1024.0*1024.0));
 
-		
+		msgctl(file, IPC_RMID, NULL);		
 	}
 
 
