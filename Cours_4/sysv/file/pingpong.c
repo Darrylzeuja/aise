@@ -49,10 +49,11 @@ int main( int argc, char ** argv )
 
 		while(!stop)
 		{
-			msgrcv(file, &m, SIZE*sizeof(int), 0, 0);
+			msgrcv(file, &m, SIZE*sizeof(int), 2, 0);
 			/* Notify end */
 			if( m.data[0] == 0 )
 				stop = 1;
+			m.type = 1;
 			msgsnd(file, &m, SIZE*sizeof(int), 0);
 		}
 
@@ -64,7 +65,7 @@ int main( int argc, char ** argv )
 		for( i = 1 ; i <= NUM_MSG ; i++)
 		{
 			m.data[0] = i;
-			
+		        m.type = 2;	
 			double start = get_time();
 			int ret = msgsnd(file, &m, SIZE*sizeof(int), 0);
 
@@ -77,10 +78,11 @@ int main( int argc, char ** argv )
 			double end = get_time();
 			total_time += end - start;
 
-			msgrcv(file, &m, SIZE*sizeof(int), 0, 0);
+			msgrcv(file, &m, SIZE*sizeof(int), 1, 0);
 		}	
 
 		m.data[0] = 0;
+		m.type = 2;
 		msgsnd(file, &m, SIZE*sizeof(int), 0);
 
 		wait( NULL );
