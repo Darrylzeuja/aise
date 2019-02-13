@@ -1,0 +1,8 @@
+set terminal png
+set output "plot.png"
+
+set title "Sinus et Cosinus"
+set xlabel "Axe des abscices"
+set ylabel "Axe des ordonnees"
+
+plot sin(x) title "Sinus" w lp, cos(x) title "Cosinus" w lp
