@@ -10,7 +10,7 @@ libppm.so : ppm.c
 	$(CC) $(CFLAGS)  -fpic -shared $^ -o $@
 
 test: test.c libppm.so
-	$(CC) $(CFLAGS) $(LDFLAGS) -lppm -L. test.c -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) -L. test.c -o $@ -lppm 
 
 clean:
 	rm -fr $(TARGET) *.so
